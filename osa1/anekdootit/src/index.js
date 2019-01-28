@@ -9,15 +9,29 @@ const Button = ({handleClick, text}) => (
 
 const randomIndex = (arr) => Math.floor(Math.random() * arr.length)
 
+const vote = (arr, index) => {
+  const copy = [...arr];
+  copy[index] !== undefined ? copy[index]++ : copy[index] = 1;
+  console.table(copy);
+  return copy;
+} 
+
 const App = (props) => {
   const [selected, setSelected] = useState(0)
+  const [votes, setVotes] = useState([])
 
   return (
     <>
       <div>
         {props.anecdotes[selected]}
       </div>
-      <Button text='next anecdote' handleClick={() => {setSelected(randomIndex(props.anecdotes))}} />
+      <div>
+        <Button text='next anecdote' handleClick={() => {setSelected(randomIndex(props.anecdotes))}} />
+      </div>
+      <div>
+        <p>Has { votes[selected] ? votes[selected] : 0 } votes!</p>
+        <Button text='vote' handleClick={() => {setVotes(vote(votes, selected))}} />
+      </div>
     </>
   )
 }
