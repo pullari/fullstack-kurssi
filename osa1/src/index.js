@@ -15,6 +15,24 @@ const Stat = ({value, text, suffix}) => (
   <p>{text} {value} {suffix}</p>
 )
 
+const Statistics = props => {
+  const totalText = 'yhteensä'
+  const averageText = 'keskiarvo'
+  const positivityText = 'positiivisia'
+  const { good, bad, neutral, goodText, badText, neutralText } = props.info;
+
+  return(
+    <>
+      <Stat value={good} text={goodText} />
+      <Stat value={neutral} text={neutralText} />
+      <Stat value={bad} text={badText} />
+      <Stat value={good + neutral + bad} text={totalText} />
+      <Stat value={(good - bad) / (good + neutral + bad)} text={averageText} />
+      <Stat value={(good / (good + neutral + bad)) * 100} text={positivityText} suffix='%' />
+    </>
+  )
+}
+
 const App = () => {
   // tallenna napit omaan tilaansa
   const [good, setGood] = useState(0)
@@ -24,10 +42,16 @@ const App = () => {
   const goodText = 'hyvä'
   const neutralText = 'neutraali'
   const badText = 'huono'
-  const totalText = 'yhteensä'
-  const averageText = 'keskiarvo'
-  const positivityText = 'positiivisia'
 
+  const info = {
+    goodText: goodText,
+    neutralText: neutralText,
+    badText: badText,
+    good: good,
+    neutral: neutral,
+    bad: bad
+  }
+  
   return (
     <div>
       <Heading text='Anna palautetta' />
@@ -35,12 +59,7 @@ const App = () => {
       <Button handleClick={() => setNeutral(neutral + 1)} text={neutralText} />
       <Button handleClick={() => setBad(bad + 1)} text={badText} />
       <Heading text='Statistiikka' />
-      <Stat value={good} text={goodText} />
-      <Stat value={neutral} text={neutralText} />
-      <Stat value={bad} text={badText} />
-      <Stat value={good + neutral + bad} text={totalText} />
-      <Stat value={(good - bad) / (good + neutral + bad)} text={averageText} />
-      <Stat value={(good / (good + neutral + bad)) * 100} text={positivityText} suffix='%' />
+      <Statistics info={info} />
     </div>
   )
 }
