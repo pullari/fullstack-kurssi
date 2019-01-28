@@ -1,68 +1,50 @@
-import React from 'react'
+import React, { useState } from 'react'
 import ReactDOM from 'react-dom'
 
-const Header = (props) => (
-  <div>
-    <h1>{props.course}</h1>
-  </div>
+const Heading = props => (
+  <h1>{props.text}</h1>
 )
 
-const Part = (props) => (
-  <p>
-    {props.part} {props.exercise}
-  </p>
+const Button = ({handleClick, text}) => (
+  <button onClick={handleClick}>
+    {text}
+  </button>
 )
 
-const Content = (props) => { 
-
-  let names = props.parts.map(p => p.name)
-  let exercises = props.parts.map(p => p.exercises)
-
-  return (
-    <>
-      <Part part={names[0]} exercise={exercises[0]} />
-      <Part part={names[1]} exercise={exercises[1]} />
-      <Part part={names[2]} exercise={exercises[2]} />
-    </>
-  )
-}
-
-const Total = (props) => {
-  let total = props.parts.reduce((a, b) => a + b.exercises, 0);
-  
-  return (
-    <p>
-      yhteensä {total} tehtävää
-    </p>
-  )
-}
+const Stat = ({value, text, suffix}) => (
+  <p>{text} {value} {suffix}</p>
+)
 
 const App = () => {
-  const course = {
-    name: 'Half Stack -sovelluskehitys',
-    parts: [
-      {
-        name: 'Reactin perusteet',
-        exercises: 10
-      },
-      {
-        name: 'Tiedonvälitys propseilla',
-        exercises: 7
-      },
-      {
-        name: 'Komponenttien tila',
-        exercises: 14
-      }
-    ]
-  }
+  // tallenna napit omaan tilaansa
+  const [good, setGood] = useState(0)
+  const [neutral, setNeutral] = useState(0)
+  const [bad, setBad] = useState(0)
+
+  const goodText = 'hyvä'
+  const neutralText = 'neutraali'
+  const badText = 'huono'
+  const totalText = 'yhteensä'
+  const averageText = 'keskiarvo'
+  const positivityText = 'positiivisia'
 
   return (
     <div>
-      <Header course={course.name} />
-      <Content parts={course.parts} />
-      <Total parts={course.parts} />
+      <Heading text='Anna palautetta' />
+      <Button handleClick={() => setGood(good + 1)} text={goodText} />
+      <Button handleClick={() => setNeutral(neutral + 1)} text={neutralText} />
+      <Button handleClick={() => setBad(bad + 1)} text={badText} />
+      <Heading text='Statistiikka' />
+      <Stat value={good} text={goodText} />
+      <Stat value={neutral} text={neutralText} />
+      <Stat value={bad} text={badText} />
+      <Stat value={good + neutral + bad} text={totalText} />
+      <Stat value={(good - bad) / (good + neutral + bad)} text={averageText} />
+      <Stat value={(good / (good + neutral + bad)) * 100} text={positivityText} suffix='%' />
     </div>
   )
 }
 
-ReactDOM.render(<App />, document.getElementById('root'))
+ReactDOM.render(<App />, 
+  document.getElementById('root')
+)
