@@ -11,7 +11,7 @@ const Button = ({handleClick, text}) => (
   </button>
 )
 
-const Stat = ({value, text, suffix}) => (
+const Statistic = ({value, text, suffix}) => (
   <p>{text} {value} {suffix}</p>
 )
 
@@ -22,15 +22,14 @@ const Statistics = props => {
   const { good, bad, neutral, goodText, badText, neutralText } = props.info;
 
   return(
-
     good !== 0 || bad !== 0 || neutral !== 0 ? 
       <>
-        <Stat value={good} text={goodText} />
-        <Stat value={neutral} text={neutralText} />
-        <Stat value={bad} text={badText} />
-        <Stat value={good + neutral + bad} text={totalText} />
-        <Stat value={(good - bad) / (good + neutral + bad)} text={averageText} />
-        <Stat value={(good / (good + neutral + bad)) * 100} text={positivityText} suffix='%' />
+        <Statistic value={good} text={goodText} />
+        <Statistic value={neutral} text={neutralText} />
+        <Statistic value={bad} text={badText} />
+        <Statistic value={good + neutral + bad} text={totalText} />
+        <Statistic value={(good - bad) / (good + neutral + bad)} text={averageText} />
+        <Statistic value={(good / (good + neutral + bad)) * 100} text={positivityText} suffix='%' />
       </>
     :
       <p>Ei yhtään palautetta annettu</p>
