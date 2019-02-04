@@ -9,6 +9,7 @@ const App = () => {
   const [ newName, setNewName ] = useState('')
   const [ newNumber, setNewNumber ] = useState('')
   const [ query, setQuery ] = useState('')
+  const [ action, setAction ] = useState(null)
 
   useEffect(() => {
     personService      
@@ -37,9 +38,20 @@ const App = () => {
         .create(person)      
         .then(person => {        
           setPersons(persons.concat(person))
+          showNoti(`Lisättiin ${person.name} listaan`, 'success')
           setNewName('')    
         })
+        .catch(error => {
+          showNoti(`Henkilön ${person.name} lisäys epäonnistui`, 'error')
+        })
     }
+  }
+
+  const showNoti = (message, status) => {
+    setAction({ message: message, status: status })
+    setTimeout(() => {
+      setAction(null)
+    }, 5000)
   }
 
   const updatePerson = (person) => {
@@ -53,6 +65,10 @@ const App = () => {
       .then(() => {
         const updatedPersons = persons.map(p => p.id !== updatedPerson.id ? p : {...p, number: person.number})
         setPersons(updatedPersons)
+        showNoti(`Päivitettiin ${personInDB.name}`, 'success')
+      })
+      .catch(error => {
+        showNoti(`Henkilön ${person.name} tietojen päivitys epäonnistui. Henkilö saattaa olla poistettu.`, 'error')
       })
     }
   } 
@@ -62,7 +78,11 @@ const App = () => {
       personService.remove(person.id)
       .then(() => {
         const filteredPersons = persons.filter(p => p.id !== person.id)
+        showNoti(`Poistettiin ${person.name} onnistuneesti`, 'success')
         setPersons(filteredPersons)
+      })
+      .catch(error => {
+        showNoti(`Henkilön ${person.name} poisto epäonnistui. Henkilö saattaa olla jo poistettu.`, 'error')
       })
     }
   }
@@ -72,6 +92,7 @@ const App = () => {
   return (
     <div>
       <h2>Puhelinluettelo</h2>
+      <Notification action={action} />
       <InputField text='rajaa näytettäviä' valuePointer={query} onChangeFunc={(e) => handleChange(e, setQuery)} />
       <h3>Lisää uusi</h3>
       <PersonForm 
@@ -82,6 +103,26 @@ const App = () => {
       />
       <h2>Numerot</h2>
       <PersonList personList={persons} query={query} removePerson={removePerson} />
+    </div>
+  )
+}
+
+const Notification = ({ action }) => {
+  if (action === null) {
+    return null
+  }
+
+  const { message, status } = action;
+
+  if(status !== 'error') return (
+    <div className="success">
+      {message}
+    </div>
+  )
+
+  return (
+    <div className="error">
+      {message}
     </div>
   )
 }
