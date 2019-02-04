@@ -17,6 +17,24 @@
       "content": "HTTP-protokollan tärkeimmät metodit ovat GET ja POST",
       "date": "2019-01-10T19:20:14.298Z",
       "important": true
+    },
+    {
+      "content": "uusi muistiinpano...",
+      "date": "2019-02-04T14:47:44.820Z",
+      "important": false,
+      "id": 4
+    },
+    {
+      "content": "uusi muistiinpano...",
+      "date": "2019-02-04T14:52:33.180Z",
+      "important": false,
+      "id": 5
+    },
+    {
+      "content": "jotakin uutta voidaan lisätä",
+      "date": "2019-02-04T14:52:42.006Z",
+      "important": false,
+      "id": 6
     }
   ]
 }

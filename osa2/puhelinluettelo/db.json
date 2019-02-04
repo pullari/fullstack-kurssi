@@ -19,6 +19,16 @@
       "name": "Lea Kutvonen",
       "number": "040-123456",
       "id": 4
+    },
+    {
+      "name": "samuli",
+      "number": "1111111",
+      "id": 5
+    },
+    {
+      "name": "joku muu",
+      "number": "11111111",
+      "id": 6
     }
   ]
 }
