@@ -1,0 +1,19 @@
+{
+  "name": "esimerkit",
+  "version": "0.0.1",
+  "description": "Esimerkki tehtävät",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "watch": "nodemon index.js",
+    "test": "test"
+  },
+  "author": "Samuli Rouvinen",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.16.4"
+  },
+  "devDependencies": {
+    "nodemon": "^1.18.9"
+  }
+}
