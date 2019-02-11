@@ -29,14 +29,14 @@ app.get('/api/notes', (request, response) => {
 
 app.get('/api/notes/:id', (request, response, next) => {
   Note.findById(request.params.id)
-  .then(note => {
-    if (note) {        
-      response.json(note.toJSON())      
-    } else {        
-      response.status(204).end()       
-    }
-  })
-  .catch(error => next(error))
+    .then(note => {
+      if (note) {
+        response.json(note.toJSON())
+      } else {
+        response.status(204).end()
+      }
+    })
+    .catch(error => next(error))
 })
 
 app.put('/api/notes/:id', (request, response, next) => {
@@ -56,18 +56,11 @@ app.put('/api/notes/:id', (request, response, next) => {
 
 app.delete('/api/notes/:id', (request, response, next) => {
   Note.findByIdAndRemove(request.params.id)
-    .then(result => {
+    .then(() => {
       response.status(204).end()
     })
     .catch(error => next(error))
 })
-
-const generateId = () => {
-  const maxId = notes.length > 0
-    ? Math.max(...notes.map(n => n.id))
-    : 0
-  return maxId + 1
-}
 
 app.post('/api/notes', (request, response, next) => {
   const body = request.body
@@ -79,10 +72,10 @@ app.post('/api/notes', (request, response, next) => {
   })
 
   note.save()
-  .then(savedNote => savedNote.toJSON())    
-  .then(savedAndFormattedNote => {
-    response.json(savedAndFormattedNote)
-  }) 
+    .then(savedNote => savedNote.toJSON())
+    .then(savedAndFormattedNote => {
+      response.json(savedAndFormattedNote)
+    })
     .catch(error => next(error))
 })
 

@@ -39,7 +39,8 @@ const App = () => {
         .then(person => {        
           setPersons(persons.concat(person))
           showNoti(`Lisättiin ${person.name} listaan`, 'success')
-          setNewName('')    
+          setNewName('')
+          setNewNumber('')
         })
         .catch(error => {
           console.log("ERROR: ", error.response.data)
