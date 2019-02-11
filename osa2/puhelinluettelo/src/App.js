@@ -42,7 +42,8 @@ const App = () => {
           setNewName('')    
         })
         .catch(error => {
-          showNoti(`Henkilön ${person.name} lisäys epäonnistui`, 'error')
+          console.log("ERROR: ", error.response.data)
+          showNoti(`Henkilön ${person.name} lisäys epäonnistui. ${error.response.data.error}`, 'error')
         })
     }
   }
