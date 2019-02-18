@@ -31,7 +31,6 @@ notesRouter.get('/:id', async (request, response, next) => {
 
 notesRouter.post('/', async (request, response, next) => {
   const body = request.body
-
   const token = getTokenFrom(request)
 
   try {
@@ -43,7 +42,7 @@ notesRouter.post('/', async (request, response, next) => {
       return response.status(401).json({ error: 'token missing or invalid' })
     }
 
-    const user = await User.findById(body.userId)
+    const user = await User.findById(decodedToken.id)
 
     const note = new Note({
       content: body.content,
