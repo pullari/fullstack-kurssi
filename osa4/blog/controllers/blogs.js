@@ -39,11 +39,20 @@ router.delete('/:id', async (req, res, next) => {
     const decodedToken = verifyToken(req.token, res)
     const blog = await Blog.findById(req.params.id)
 
+    if(blog.user === undefined || decodedToken === undefined) {
+      res.status(400).json({ error: 'Missing authentication or user' })
+    }
+
     if(blog.user.toString() !== decodedToken.id.toString()) {
       res.status(401).json({ error: 'Can\'t remove others blogs' })
     }
 
     await blog.delete()
+    const user = await User.findById(blog.user)
+
+    user.blogs = user.blogs.filter(b => b.id !== blog.id)
+    await user.save()
+
     res.status(204).end()
   } catch (err) {
     next(err)
