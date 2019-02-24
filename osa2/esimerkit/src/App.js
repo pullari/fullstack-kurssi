@@ -3,6 +3,7 @@ import Note from './components/Note'
 import LoginForm from './components/LoginForm'
 import noteService from './services/notes'
 import Togglable from './components/Togglable'
+import NoteForm from './components/NoteForm'
 import loginService from './services/login' 
 
 const App = (props) => {  
@@ -131,22 +132,6 @@ const App = (props) => {
           />
           <button onClick={() => setLoginVisible(false)}>cancel</button>
         </div>
-      </div>
-    )
-  }
-
-  const NoteForm = ({ onSubmit, handleChange, value}) => {
-    return (
-      <div>
-        <h2>Luo uusi muistiinpano</h2>
-  
-        <form onSubmit={onSubmit}>
-          <input
-            value={value}
-            onChange={handleChange}
-          />
-          <button type="submit">tallenna</button>
-        </form>
       </div>
     )
   }

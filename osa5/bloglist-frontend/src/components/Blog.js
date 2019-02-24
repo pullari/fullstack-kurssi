@@ -13,11 +13,10 @@ const Blog = ({ blog, handleLike, handleDelete }) => {
 
   return (
     <div style={ { border: 'solid 1px' } }>
-      <div onClick={toggleVisibility}>
-        {blog.title}
+      <div onClick={toggleVisibility} className='always-shown'>
+        {blog.title} {blog.author}
       </div>
-      <div style={showWhenVisible}>
-        <div>Author: {blog.author}</div>
+      <div style={showWhenVisible} className='hideable'>
         <div>URI: {blog.url}</div>
         <div>
           Likes: {blog.likes}
