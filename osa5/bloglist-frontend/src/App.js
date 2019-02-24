@@ -3,16 +3,19 @@ import Togglable from './components/Togglable'
 import Blog from './components/Blog'
 import blogService from './services/blogs'
 import loginService from './services/login'
+import { useField } from './hooks'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
   const [user, setUser] = useState(null)
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
   const [infoMessage, setMessage] = useState(null)
-  const [title, setTitle] = useState('')
-  const [author, setAuthor] = useState('')
-  const [url, setUrl] = useState('')
+
+  const { reset: userReset, ...usernameField } = useField('text')
+  const { reset: passwordReset, ...passwordField }   = useField('password')
+
+  const { reset: titleReset, ...titleField } = useField('text')
+  const { reset: authorReset, ...authorField }   = useField('text')
+  const { reset: urlReset, ...urlField }   = useField('text')
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
@@ -34,20 +37,10 @@ const App = () => {
       <h2>Log in to application</h2>
       <form onSubmit={handleLogin} className='login-form'>
         <div>käyttäjätunnus
-          <input
-            type="text"
-            value={username}
-            name="Username"
-            onChange={({ target }) => setUsername(target.value)}
-          />
+          <input name="username" {...usernameField}/>
         </div>
         <div>salasana
-          <input
-            type="password"
-            value={password}
-            name="Password"
-            onChange={({ target }) => setPassword(target.value)}
-          />
+          <input name="Password" {...passwordField}/>
         </div>
         <button type="submit">kirjaudu</button>
       </form>
@@ -57,28 +50,13 @@ const App = () => {
   const blogForm = () => (
     <form onSubmit={addBlog}>
       <div>title
-        <input
-          type="text"
-          value={title}
-          name="Title"
-          onChange={({ target }) => setTitle(target.value)}
-        />
+        <input name="Title" {...titleField}/>
       </div>
       <div>author
-        <input
-          type="text"
-          value={author}
-          name="Author"
-          onChange={({ target }) => setAuthor(target.value)}
-        />
+        <input name="Author" {...authorField}/>
       </div>
       <div>url
-        <input
-          type="text"
-          value={url}
-          name="Url"
-          onChange={({ target }) => setUrl(target.value)}
-        />
+        <input name="Url" {...urlField}/>
       </div>
       <button type="submit">lisää blogi</button>
     </form>
@@ -88,18 +66,18 @@ const App = () => {
     event.preventDefault()
 
     const newBlog = {
-      title,
-      author,
-      url,
+      title: titleField.value,
+      author: authorField.value,
+      url: urlField.value,
       likes: 0,
     }
 
     const returnedBlog = await blogService.create(newBlog)
     setBlogs(blogs.concat(returnedBlog))
-    setTitle('')
-    setAuthor('')
-    setUrl('')
-    setInfoMessage({ mes: `blogi "${title}" lisätty`, class: 'success' })
+    titleReset()
+    authorReset()
+    urlReset()
+    setInfoMessage({ mes: `blogi "${titleField.value}" lisätty`, class: 'success' })
   }
 
   const handleLogout = async (event) => {
@@ -107,7 +85,7 @@ const App = () => {
     try {
       setUser(null)
       window.localStorage.clear()
-      setInfoMessage({ mes: `${username} Kirjauduttu ulos!`, class: 'success' })
+      setInfoMessage({ mes: `${usernameField.value} Kirjauduttu ulos!`, class: 'success' })
     } catch (err) {
       setInfoMessage({ mes: 'Ulos kirjautuminen epäonnistui', class: 'error' })
     }
@@ -115,6 +93,8 @@ const App = () => {
 
   const handleLogin = async (event) => {
     event.preventDefault()
+    const username = usernameField.value
+    const password = passwordField.value
     try {
       const user = await loginService.login({
         username, password,
@@ -125,9 +105,9 @@ const App = () => {
       )
       blogService.setToken(user.token)
       setUser(user)
-      setUsername('')
-      setPassword('')
-      setInfoMessage({ mes: `${username} kirjautui sisään!`, class: 'success' })
+      userReset()
+      passwordReset()
+      setInfoMessage({ mes: `${usernameField.value} kirjautui sisään!`, class: 'success' })
     } catch (exception) {
       setInfoMessage({ mes: 'käyttäjätunnus tai salasana virheellinen', class: 'error' })
     }
